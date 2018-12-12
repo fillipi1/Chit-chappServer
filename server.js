@@ -39,9 +39,27 @@ app.get('/', function (req, res) {
         to: req.body.phone,  
         from: '+15103437234',
     })
-    .then((message) => console.log(message.status))
-    .done();
+    .then((message) => {
+        res.json(message);
+        console.log(message.from);
+        processMessage(message);
+      })
+      .done();
+
+      function processMessage(message) {
+        var receivingNum = message.to;
+
+        var ref= firebase.database().ref('/messages');
+        ref.child(receivingNum).once("value", snapshot => {
     
+            if(!snapshot.exists()) {
+              ref.child(receivingNum).set(0);
+            }
+    
+        });
+    
+    
+      }
  });
 
  // a post request to /sms is made when a customer sends an sms from their phone to the agents twilio number. text is 
@@ -51,7 +69,6 @@ app.post('/sms', function (req, res) {
     let incomingNum=req.body.From;
     var newMessageData={
     phone: incomingNum,
-    timestamp: Date.now(),
     message: req.body.Body
     };
     var ref=firebase.database().ref('messages/all');
