@@ -55,7 +55,6 @@ app.get('/', function (req, res) {
             if(!snapshot.exists()) {
               ref.child(receivingNum).set(0);
             }
-    
         });
     
     
@@ -81,6 +80,16 @@ app.post('/sms', function (req, res) {
     });
     console.log(req.body);  
 });
+
+app.post('/call', function(req, res) {
+    client.calls.create({
+      url: 'https://handler.twilio.com/twiml/EHf116bc6752dbc45f2067481543a848ea',
+      to: '+15103342286',
+      from: '+15103437234',
+    })
+    .then(call => process.stdout.write(call.sid));
+    console.log(req)
+})
 var server=app.listen(8081, function () {
    var host=server.address().address
    var port=server.address().port
