@@ -82,9 +82,10 @@ app.post('/sms', function (req, res) {
 });
 
 app.post('/call', function(req, res) {
+    number = req.body.phone;
     client.calls.create({
-      url: 'https://handler.twilio.com/twiml/EHf116bc6752dbc45f2067481543a848ea',
-      to: '+15103342286',
+      url: 'https://handler.twilio.com/twiml/EH55befc236ea171fb69195529ab2ec6fc',
+      to: number,
       from: '+15103437234',
     })
     .then(call => process.stdout.write(call.sid));
